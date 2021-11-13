@@ -10,6 +10,9 @@ namespace Gulliver.Busca.Api.Models
         [AliasAs("google_domain")]
         public string GoogleDomain { get; set; }
 
+        [AliasAs("location")]
+        public string Local { get; set; }
+
         [AliasAs("gl")]
         public string Gl { get; set; }
 

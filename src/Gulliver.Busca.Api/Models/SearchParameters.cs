@@ -10,6 +10,9 @@ namespace Gulliver.Busca.Api.Models
         [JsonPropertyName("google_domain")]
         public string GoogleDomain { get; set; }
 
+        [JsonPropertyName("location")]
+        public string Location { get; set; }
+
         [JsonPropertyName("gl")]
         public string Gl { get; set; }
 

@@ -24,6 +24,21 @@ namespace Gulliver.Busca.Api.Models
 
         [JsonPropertyName("unclaimed")]
         public bool Unclaimed { get; set; }
+
+        [JsonPropertyName("data_id")]
+        public string DataId { get; set; }
+
+        [JsonPropertyName("snippet")]
+        public string Snippet { get; set; }
+
+        [JsonPropertyName("link")]
+        public string Link { get; set; }
+
+        [JsonPropertyName("rating")]
+        public double Rating { get; set; }
+
+        [JsonPropertyName("reviews")]
+        public int Reviews { get; set; }
     }
 
 }

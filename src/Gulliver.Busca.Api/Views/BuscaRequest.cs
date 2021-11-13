@@ -4,7 +4,7 @@ namespace Gulliver.Busca.Api.Views
 {
     public class BuscaRequest
     {
-        public string Termo { get; set; }
+        public string Local { get; set; }
 
         private string ApiKey { get; set; }
 
@@ -22,7 +22,7 @@ namespace Gulliver.Busca.Api.Views
         {
             return new SerpEngineRequest()
             {
-                Query = buscaRequest.Termo.Replace(" ", "+"),
+                Local = buscaRequest.Local.Replace(" ", "+"),
                 Gl = "br",
                 Hl = "pt",
                 Output = "json",

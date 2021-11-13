@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Gulliver.Busca.Api.Configuration;
+using Gulliver.Busca.Api.Mapping;
 using Gulliver.Busca.Api.RefitServices;
 using Gulliver.Busca.Api.Services;
 using Microsoft.AspNetCore.Builder;
@@ -28,6 +29,12 @@ namespace Gulliver.Busca.Api
         public void ConfigureServices(IServiceCollection services)
         {
             Configuration.GetSection("DefaultConfiguration").Bind(AppSettings);
+
+            services.AddAutoMapper(a =>
+            {
+                a.AddProfile(new SerpSearchProfile());
+            },
+            typeof(Startup));
 
             services.AddRefitClient<ISerpEngine>(p => new RefitSettings()
             {

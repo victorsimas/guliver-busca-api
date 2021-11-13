@@ -8,6 +8,5 @@ namespace Gulliver.Busca.Api.RefitServices
     {
         [Get("/search")]
         Task<SerpEngineResponse> GetSearchResult(SerpEngineRequest request);
-         
     }
 }
