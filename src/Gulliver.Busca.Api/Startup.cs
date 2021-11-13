@@ -29,6 +29,8 @@ namespace Gulliver.Busca.Api
         public void ConfigureServices(IServiceCollection services)
         {
             Configuration.GetSection("DefaultConfiguration").Bind(AppSettings);
+            
+            AppSettings.SerpConfiguration.ApiKey = Environment.GetEnvironmentVariable("SERP_API_KEY");
 
             services.AddAutoMapper(a =>
             {

@@ -19,5 +19,11 @@ namespace Gulliver.Busca.Api.Models
 
         [JsonPropertyName("places_results")]
         public List<PlacesResult> PlacesResults { get; set; }
+
+        [JsonPropertyName("organic_results")]
+        public List<OrganicResult> OrganicResults { get; set; }
+
+        [JsonPropertyName("image_results")]
+        public List<ImageResult> ImageResults { get; set; }
     }
 }

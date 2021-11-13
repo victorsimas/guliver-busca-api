@@ -27,7 +27,6 @@ namespace Gulliver.Busca.Api.Views
                 Hl = "pt",
                 Output = "json",
                 GoogleDomain = "google.com.br",
-                SearchType = "places",
                 ApiKey = buscaRequest.GetApiKey()
             };
         }
