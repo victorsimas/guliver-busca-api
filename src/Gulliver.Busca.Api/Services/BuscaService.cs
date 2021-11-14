@@ -21,18 +21,48 @@ namespace Gulliver.Busca.Api.Services
         public async Task<BuscaResponse> BuscarCatalogo(BuscaRequest request)
         {
             BuscaResponse buscaResponse = new();
-            
+
             await Task.WhenAll(
                 BuscarHoteis(request, buscaResponse),
-                Task.FromResult(buscaResponse.History = await ComplementarBusca(request, "Historia")),
-                Task.FromResult(buscaResponse.Culture = await ComplementarBusca(request, "Cultura")),
-                Task.FromResult(buscaResponse.Gastronomy = await ComplementarBusca(request, "Gastronomia")),
-                Task.FromResult(buscaResponse.NightLife = await ComplementarBusca(request, "Vida Noturna")),
-                Task.FromResult(buscaResponse.Parks = await ComplementarBusca(request, "Parques")),
-                Task.FromResult(buscaResponse.Entertainment = await ComplementarBusca(request, "Entreterimento"))
+                ConfigurarHistoria(request, buscaResponse),
+                ConfigurarCultura(request, buscaResponse),
+                ConfigurarGastronomia(request, buscaResponse),
+                ConfigurarParques(request, buscaResponse),
+                ConfigurarVidaNortuna(request, buscaResponse),
+                ConfigurarEntreterimento(request, buscaResponse)
             );
 
             return buscaResponse;
+        }
+
+        private async Task ConfigurarHistoria(BuscaRequest request, BuscaResponse buscaResponse)
+        {
+            buscaResponse.History = await ComplementarBusca(request, "Historia");
+        }
+
+        private async Task ConfigurarCultura(BuscaRequest request, BuscaResponse buscaResponse)
+        {
+            buscaResponse.Culture = await ComplementarBusca(request, "Cultura");
+        }
+
+        private async Task ConfigurarGastronomia(BuscaRequest request, BuscaResponse buscaResponse)
+        {
+            buscaResponse.Gastronomy = await ComplementarBusca(request, "Gastronomia");
+        }
+
+        private async Task ConfigurarParques(BuscaRequest request, BuscaResponse buscaResponse)
+        {
+            buscaResponse.Parks = await ComplementarBusca(request, "Parques");
+        }
+
+        private async Task ConfigurarVidaNortuna(BuscaRequest request, BuscaResponse buscaResponse)
+        {
+            buscaResponse.NightLife = await ComplementarBusca(request, "Vida Noturna");
+        }
+
+        private async Task ConfigurarEntreterimento(BuscaRequest request, BuscaResponse buscaResponse)
+        {
+            buscaResponse.Entertainment = await ComplementarBusca(request, "Entreterimento");
         }
 
         private async Task BuscarHoteis(BuscaRequest request, BuscaResponse buscaResponse)

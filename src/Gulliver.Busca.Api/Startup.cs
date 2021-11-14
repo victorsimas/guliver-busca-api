@@ -30,7 +30,7 @@ namespace Gulliver.Busca.Api
         {
             Configuration.GetSection("DefaultConfiguration").Bind(AppSettings);
             
-            AppSettings.SerpConfiguration.ApiKey = Environment.GetEnvironmentVariable("SERP_API_KEY");
+            AppSettings.SerpConfiguration =  new() { ApiKey = Environment.GetEnvironmentVariable("SERP_API_KEY") };
 
             services.AddAutoMapper(a =>
             {
@@ -69,7 +69,7 @@ namespace Gulliver.Busca.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.EnvironmentName.Equals("Desenvolvimento"))
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
