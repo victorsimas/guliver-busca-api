@@ -15,10 +15,6 @@ namespace Gulliver.Busca.Api.Mapping
 
         private void MapearSerpSearchResponse()
         {
-            CreateMap<SerpEngineResponse, BuscaResponse>()
-                .ForMember(dest => dest.Hotels, opts => opts.MapFrom(src => src.PlacesResults))
-                .ForPath(dest => dest.Location, opts => opts.MapFrom(src => src.SearchParameters.Location.Replace("+"," ")));
-
             CreateMap<(List<OrganicResult> organics, List<ImageResult> images), Categoria>()
                 .ForMember(dest => dest.Text, opts => opts.MapFrom(src => string.Join(" ", src.organics.Select(x => x.Snippet))))
                 .ForMember(dest => dest.Img, opts => opts.MapFrom(src => src.images.FirstOrDefault().Image))

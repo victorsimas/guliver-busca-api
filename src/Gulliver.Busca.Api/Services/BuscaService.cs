@@ -22,7 +22,7 @@ namespace Gulliver.Busca.Api.Services
 
         public async Task<BuscaResponse> BuscarCatalogo(BuscaRequest request)
         {
-            BuscaResponse buscaResponse = new();
+            BuscaResponse buscaResponse = new() { Location = request.Local };
 
             await Task.WhenAll(
                 BuscarHoteis(request, buscaResponse),
@@ -82,7 +82,7 @@ namespace Gulliver.Busca.Api.Services
                 serpResponse.PlacesResults.Where(x => !string.IsNullOrEmpty(x.Snippet)))
                     .Take(5);
 
-            await BuscarImagensHoteis(request ,buscaResponse, serpResponse);
+            _ = BuscarImagensHoteis(request ,buscaResponse, serpResponse);
         }
 
         private async Task BuscarImagensHoteis(BuscaRequest request, BuscaResponse buscaResponse, SerpEngineResponse serpResponse)
@@ -94,14 +94,21 @@ namespace Gulliver.Busca.Api.Services
                     BuscaRequest requestImages = new() { Local = hotel.Text };
                     requestImages.SetApiKey(request.ApiKey);
 
-                    await BuscaImagens(serpResponse, requestImages, string.Empty);
+                    _ = PopularImagemDeHotel(serpResponse, hotel, requestImages);
 
-                    hotel.Img = serpResponse.ImageResults.FirstOrDefault().Image;
+                    await new ValueTask<BuscaResponse>(buscaResponse);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                 }
             }
+        }
+
+        private async Task PopularImagemDeHotel(SerpEngineResponse serpResponse, Hotel hotel, BuscaRequest requestImages)
+        {
+            await BuscaImagens(serpResponse, requestImages, string.Empty);
+
+            hotel.Img = serpResponse.ImageResults.FirstOrDefault().Image;
         }
 
         private async Task<Categoria> ComplementarBusca(BuscaRequest request, string topico)
