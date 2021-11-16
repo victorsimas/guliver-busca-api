@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Gulliver.Busca.Api.Models;
@@ -38,6 +40,8 @@ namespace Gulliver.Busca.Api.Services
         private async Task ConfigurarHistoria(BuscaRequest request, BuscaResponse buscaResponse)
         {
             buscaResponse.History = await ComplementarBusca(request, "Historia");
+
+            buscaResponse.LocationDescription = buscaResponse.History.Text;
         }
 
         private async Task ConfigurarCultura(BuscaRequest request, BuscaResponse buscaResponse)
@@ -69,12 +73,35 @@ namespace Gulliver.Busca.Api.Services
         {
             SerpEngineRequest requestSerp = (SerpEngineRequest)request;
 
-            requestSerp.Query = "Hotel";
+            requestSerp.Query += "Hotéis";
             requestSerp.SearchType = "places";
 
             SerpEngineResponse serpResponse = await _serpEngine.GetSearchResult(requestSerp);
 
-            buscaResponse.Hotels = _mapper.Map<List<Hotel>>(serpResponse.PlacesResults);
+            buscaResponse.Hotels = _mapper.Map<IEnumerable<Hotel>>(
+                serpResponse.PlacesResults.Where(x => !string.IsNullOrEmpty(x.Snippet)))
+                    .Take(5);
+
+            await BuscarImagensHoteis(request ,buscaResponse, serpResponse);
+        }
+
+        private async Task BuscarImagensHoteis(BuscaRequest request, BuscaResponse buscaResponse, SerpEngineResponse serpResponse)
+        {
+            foreach (var hotel in buscaResponse.Hotels)
+            {
+                try
+                {
+                    BuscaRequest requestImages = new() { Local = hotel.Text };
+                    requestImages.SetApiKey(request.ApiKey);
+
+                    await BuscaImagens(serpResponse, requestImages, string.Empty);
+
+                    hotel.Img = serpResponse.ImageResults.FirstOrDefault().Image;
+                }
+                catch(Exception)
+                {
+                }
+            }
         }
 
         private async Task<Categoria> ComplementarBusca(BuscaRequest request, string topico)
@@ -97,7 +124,7 @@ namespace Gulliver.Busca.Api.Services
         {
             SerpEngineRequest requestSerp = (SerpEngineRequest)request;
 
-            requestSerp.Query = topico;
+            requestSerp.Query += topico;
 
             SerpEngineResponse serpResponseTemp = await _serpEngine.GetSearchResult(requestSerp);
 
@@ -108,7 +135,7 @@ namespace Gulliver.Busca.Api.Services
         {
             SerpEngineRequest requestSerp = (SerpEngineRequest)request;
 
-            requestSerp.Query = topico;
+            requestSerp.Query += topico;
             requestSerp.SearchType = "images";
 
             SerpEngineResponse serpResponseTemp = await _serpEngine.GetSearchResult(requestSerp);

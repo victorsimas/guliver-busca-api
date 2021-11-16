@@ -20,15 +20,15 @@ namespace Gulliver.Busca.Api.Mapping
                 .ForPath(dest => dest.Location, opts => opts.MapFrom(src => src.SearchParameters.Location.Replace("+"," ")));
 
             CreateMap<(List<OrganicResult> organics, List<ImageResult> images), Categoria>()
-                .ForMember(dest => dest.Text, opts => opts.MapFrom(src => src.organics.FirstOrDefault().Snippet))
+                .ForMember(dest => dest.Text, opts => opts.MapFrom(src => string.Join(" ", src.organics.Select(x => x.Snippet))))
                 .ForMember(dest => dest.Img, opts => opts.MapFrom(src => src.images.FirstOrDefault().Image))
-                .ForMember(dest => dest.Imgs, opts => opts.MapFrom(src => src.images.Select(x => x.Image)));
+                .ForMember(dest => dest.Imgs, opts => opts.MapFrom(src => src.images.Select(x => x.Image).Take(5)));
 
             CreateMap<PlacesResult, Hotel>()
                 .ForMember(dest => dest.Rating, opts => opts.MapFrom(src => src.Rating))
                 .ForMember(dest => dest.Text, opts => opts.MapFrom(src => src.Title))
                 .ForMember(dest => dest.TextDescription, opts => opts.MapFrom(src => src.Snippet))
-                .ForMember(dest => dest.Img, opts => opts.MapFrom(src => src.Link))
+                .ForMember(dest => dest.Link, opts => opts.MapFrom(src => src.Link))
                 .ForMember(dest => dest.AverageOfStay, opts => opts.MapFrom(src => src.Reviews.ToString()));
         }
     }

@@ -1,4 +1,5 @@
 using Gulliver.Busca.Api.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Gulliver.Busca.Api.Views
 {
@@ -6,16 +7,12 @@ namespace Gulliver.Busca.Api.Views
     {
         public string Local { get; set; }
 
-        private string ApiKey { get; set; }
+        [BindNever]
+        public string ApiKey { get; private set; }
 
         public void SetApiKey(string apiKey)
         {
             ApiKey = apiKey;
-        }
-
-        public string GetApiKey()
-        {
-            return ApiKey;
         }
 
         public static explicit operator SerpEngineRequest(BuscaRequest buscaRequest)
@@ -23,11 +20,12 @@ namespace Gulliver.Busca.Api.Views
             return new SerpEngineRequest()
             {
                 Local = buscaRequest.Local.Replace(" ", "+"),
+                Query = buscaRequest.Local.Replace(" ", "+"),
                 Gl = "br",
                 Hl = "pt",
                 Output = "json",
                 GoogleDomain = "google.com.br",
-                ApiKey = buscaRequest.GetApiKey()
+                ApiKey = buscaRequest.ApiKey
             };
         }
     }

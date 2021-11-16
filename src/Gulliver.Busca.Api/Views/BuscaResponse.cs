@@ -4,9 +4,9 @@ namespace Gulliver.Busca.Api.Views
 {
     public class BuscaResponse
     {
-        public int LocationDescription { get; set; }
+        public string LocationDescription { get; set; }
 
-        public List<Hotel> Hotels { get; set; }
+        public IEnumerable<Hotel> Hotels { get; set; }
 
         public string Location { get; set; }
 

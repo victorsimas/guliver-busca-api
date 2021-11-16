@@ -15,7 +15,7 @@
             "stopAtEntry": false,
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Desenvolvimento",
-                "SERP_API_KEY": ""
+                "SERP_API_KEY": "A4DF08975E9445F1B5F14A7F92E09E82"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
